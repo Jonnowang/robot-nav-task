@@ -1,6 +1,8 @@
 type Direction = "NORTH" | "SOUTH" | "EAST" | "WEST"
 type Position = [number, number]
 
+const GRIDSIZE = 5
+
 // Component class for each tile on board, can set tile to have a wall
 class Tile {
     is_wall: boolean;
@@ -34,16 +36,16 @@ class Board {
         this.tiles = []
         this.robot = null
 
-        for(var i: number = 0; i < 5; i++) {
+        for(var i: number = 0; i < GRIDSIZE; i++) {
             this.tiles[i] = [];
-            for(var j: number = 0; j < 5; j++) {
+            for(var j: number = 0; j < GRIDSIZE; j++) {
                 this.tiles[i][j] = new Tile(false);
             }
         }
     }
 
     private check_invalid(ROW: number, COL: number) {
-        if (ROW < 1 || ROW > 5 || COL < 1 || COL > 5) {
+        if (ROW < 1 || ROW > GRIDSIZE || COL < 1 || COL > GRIDSIZE) {
             return true
         }
     }
@@ -68,13 +70,47 @@ class Board {
         this.tiles[ROW-1][COL-1]["is_wall"] = true
     }
 
+    MOVE() {
+        if (this.robot == null) return false
+
+        let new_position = this.robot.position
+        if (this.robot.facing == "NORTH") {
+            new_position = [(new_position[0]%GRIDSIZE)+1,new_position[1]]
+        }
+        else if (this.robot.facing == "EAST") {
+            new_position = [new_position[0],(new_position[1]%GRIDSIZE)+1]
+        }
+        else if (this.robot.facing == "SOUTH") {
+            new_position = [new_position[0]-1 === 0 ? 5 : new_position[0]-1,new_position[1]]
+        }
+        else if (this.robot.facing == "WEST") {
+            new_position = [new_position[0], new_position[1]-1 === 0 ? 5 : new_position[1]-1]
+        }
+
+        console.log(new_position)
+        if (this.tiles[new_position[0]-1][new_position[1]-1]["is_wall"]) return false
+
+        this.robot.position = new_position
+    }
+
     REPORT() {
         this.robot != null ? console.log(`${this.robot.position},${this.robot.facing}`) : console.log("No Robot Placed!")
     }
 }
 
 let board = new Board()
-// board.PLACE_ROBOT(2,3,"EAST")
+board.PLACE_ROBOT(2,3,"WEST")
+board.PLACE_WALL(2,4)
 board.REPORT()
-board.PLACE_WALL(2,2)
+board.MOVE()
+board.REPORT()
+board.MOVE()
+board.REPORT()
+board.MOVE()
+board.REPORT()
+board.MOVE()
+board.REPORT()
+board.MOVE()
+board.REPORT()
 console.log(board.tiles)
+console.log(0%5)
