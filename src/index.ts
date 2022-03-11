@@ -28,7 +28,7 @@ class Robot {
 }
 
 // Main toy robot board class that contains tiles and the robot
-class Board {
+class Game {
     tiles: Tile[][]
     robot: Robot | null
 
@@ -93,24 +93,43 @@ class Board {
         this.robot.position = new_position
     }
 
+    LEFT() {
+        if (this.robot == null) return false
+
+        if (this.robot.facing == "NORTH") {
+            this.robot.facing = "WEST"
+        }
+        else if (this.robot.facing == "EAST") {
+            this.robot.facing = "NORTH"
+        }
+        else if (this.robot.facing == "SOUTH") {
+            this.robot.facing = "EAST"
+        }
+        else if (this.robot.facing == "WEST") {
+            this.robot.facing = "SOUTH"
+        }
+    }
+
+    RIGHT() {
+        if (this.robot == null) return false
+        
+        if (this.robot.facing == "NORTH") {
+            this.robot.facing = "EAST"
+        }
+        else if (this.robot.facing == "EAST") {
+            this.robot.facing = "SOUTH"
+        }
+        else if (this.robot.facing == "SOUTH") {
+            this.robot.facing = "WEST"
+        }
+        else if (this.robot.facing == "WEST") {
+            this.robot.facing = "NORTH"
+        }
+    }
+
     REPORT() {
         this.robot != null ? console.log(`${this.robot.position},${this.robot.facing}`) : console.log("No Robot Placed!")
     }
 }
 
-let board = new Board()
-board.PLACE_ROBOT(2,3,"WEST")
-board.PLACE_WALL(2,4)
-board.REPORT()
-board.MOVE()
-board.REPORT()
-board.MOVE()
-board.REPORT()
-board.MOVE()
-board.REPORT()
-board.MOVE()
-board.REPORT()
-board.MOVE()
-board.REPORT()
-console.log(board.tiles)
-console.log(0%5)
+let board = new Game()
