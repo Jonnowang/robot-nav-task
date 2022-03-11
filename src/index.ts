@@ -10,10 +10,6 @@ class Tile {
     constructor(wall: boolean) {
         this.is_wall = wall;
     }
-
-    set_as_wall() {
-        this.is_wall = !this.is_wall
-    }
 }
 
 // Component class for robot, has intrinsic orientation and position
@@ -67,6 +63,7 @@ class Game {
 
     PLACE_WALL(ROW: number, COL: number) {
         if (this.robot?.position[0] === ROW && this.robot?.position[1] === ROW) return false
+        if (this.check_invalid(ROW,COL)) return false
         this.tiles[ROW-1][COL-1]["is_wall"] = true
     }
 
@@ -132,4 +129,12 @@ class Game {
     }
 }
 
-let board = new Game()
+let g = new Game()
+g.PLACE_ROBOT(2,2,"WEST")
+g.PLACE_WALL(1,1)
+g.PLACE_WALL(2,2)
+g.PLACE_WALL(1,3)
+g.LEFT()
+g.LEFT()
+g.MOVE()
+g.REPORT()
