@@ -28,6 +28,7 @@ class Game {
     tiles: Tile[][]
     robot: Robot | null
 
+    // Generate 5x5 Grid of possible tiles all initialised with no wall
     constructor() {
         this.tiles = []
         this.robot = null
@@ -40,13 +41,14 @@ class Game {
         }
     }
 
-    private check_invalid(ROW: number, COL: number) {
+    // Internal function to check if coordinates are valid given grid size
+    private check_invalid(COL: number, ROW: number) {
         if (ROW < 1 || ROW > GRIDSIZE || COL < 1 || COL > GRIDSIZE) {
             return true
         }
     }
 
-    PLACE_ROBOT(ROW: number, COL: number, FACING: Direction) {
+    PLACE_ROBOT(COL: number, ROW: number, FACING: Direction) {
 
         // If out of bounds or occupied by wall ignore command
         if (this.check_invalid(ROW,COL)) return false
@@ -61,12 +63,14 @@ class Game {
         }
     }
 
-    PLACE_WALL(ROW: number, COL: number) {
-        if (this.robot?.position[0] === ROW && this.robot?.position[1] === ROW) return false
+    // Place a wall if not occupied and is a valid coordinate 
+    PLACE_WALL(COL: number, ROW: number) {
+        if (this.robot?.position[0] === ROW && this.robot?.position[1] === COL) return false
         if (this.check_invalid(ROW,COL)) return false
         this.tiles[ROW-1][COL-1]["is_wall"] = true
     }
 
+    // Function to move the robot
     MOVE() {
         if (this.robot == null) return false
 
@@ -84,12 +88,13 @@ class Game {
             new_position = [new_position[0], new_position[1]-1 === 0 ? 5 : new_position[1]-1]
         }
 
-        console.log(new_position)
+        // If new position is wall ignore movement
         if (this.tiles[new_position[0]-1][new_position[1]-1]["is_wall"]) return false
 
         this.robot.position = new_position
     }
 
+    // Turn left
     LEFT() {
         if (this.robot == null) return false
 
@@ -107,6 +112,7 @@ class Game {
         }
     }
 
+    // Turn right
     RIGHT() {
         if (this.robot == null) return false
         
@@ -124,17 +130,19 @@ class Game {
         }
     }
 
+    // Report robot position and orientation if robot has been placed
     REPORT() {
-        this.robot != null ? console.log(`${this.robot.position},${this.robot.facing}`) : console.log("No Robot Placed!")
+        this.robot != null ? console.log(`${this.robot.position[1]},${this.robot.position[0]},${this.robot.facing}`) : console.log("No Robot Placed!")
     }
 }
 
 let g = new Game()
-g.PLACE_ROBOT(2,2,"WEST")
-g.PLACE_WALL(1,1)
-g.PLACE_WALL(2,2)
-g.PLACE_WALL(1,3)
-g.LEFT()
-g.LEFT()
+g.PLACE_ROBOT(3,3,"NORTH")
+g.PLACE_WALL(3,5)
+g.MOVE()
+g.MOVE()
+g.RIGHT()
+g.MOVE()
+g.MOVE()
 g.MOVE()
 g.REPORT()
