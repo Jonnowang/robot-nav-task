@@ -58,6 +58,7 @@ export class Game {
         }
         else {
             this.robot.position = [ROW,COL];
+            this.robot.facing = FACING;
             return true
         }
     }
