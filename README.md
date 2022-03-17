@@ -6,14 +6,18 @@ In the root directory run:
 
 ` $ npm install `
 
-To build without running:
+Build without running:
 
 ` $ npm build `
 
-Start the game using:
+Start the game:
 
 ` $ npm start `
 
 Execute unit tests:
 
 ` $ npm test `
+
+Instructions for playing the game will be given once started.
+
+Enjoy!
